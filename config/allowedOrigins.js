@@ -1,8 +1,3 @@
-const allowedOrigins = [
-  "https://www.yoursite.com",
-  "http://localhost:3500",
-  "http://localhost:3000",
-  "https://checkout.stripe.com",
-];
+const allowedOrigins = ["http://localhost:3000"];
 
 module.exports = allowedOrigins;
