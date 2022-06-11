@@ -1,4 +1,4 @@
-const User = require("../model/User");
+import User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const zoomConfig = require("../config/zoomConfig");
 const rp = require("request-promise");

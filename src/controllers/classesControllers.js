@@ -1,4 +1,4 @@
-const User = require("../model/User");
+import User = require("../models/User");
 const axioClient = require("../utils/axioClient");
 const axios = require("axios");
 const jwt = require("jsonwebtoken");

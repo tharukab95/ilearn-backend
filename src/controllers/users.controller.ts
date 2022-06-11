@@ -1,6 +1,11 @@
-const User = require("../model/User");
-const Order = require("../model/Order");
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+import User from "../models/User";
+// import Order = require("../model/Order");
+import Stripe from "stripe";
+const stripe = new Stripe(
+  process.env.STRIPE_SECRET_KEY ?? "",
+  {} as Stripe.StripeConfig
+);
+// import stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const getUsers = async (req, res) => {
   const users = await User.find();
@@ -74,7 +79,7 @@ const deleteUser = async (req, res) => {
   res.json(result);
 };
 
-const getUser = async (req, res) => {
+export const getUser = async (req, res) => {
   const { uid } = req.params;
   console.log(uid);
   if (!uid) return res.status(400).json({ message: "User ID required" });
@@ -86,50 +91,48 @@ const getUser = async (req, res) => {
   res.status(200).json(user);
 };
 
-const getOrders = async (req, res) => {
-  const { customerUid } = req.query;
+// const getOrders = async (req, res) => {
+//   const { customerUid } = req.query;
 
-  const result = await Order.find({ customerUid: customerUid });
+//   const result = await Order.find({ customerUid: customerUid });
 
-  res.status(200).json({ data: result });
-};
+//   res.status(200).json({ data: result });
+// };
 
 const createPaymentIntent = async (req, res) => {
   const { amount, customerUid } = req.body;
   const user = await User.findOne({ customerUid: customerUid });
 
-  if (!user?.stripeId) {
+  if (user?.stripeId) {
     const customer = await stripe.customers.create({
-      phone: user.phone,
-      address: { country: "LK" },
+      phone: user?.phone,
+      address: { country: "LK" } as Stripe.AddressParam,
     });
     user.stripeId = customer.id;
     await user.save();
   }
   const ephemeralKey = await stripe.ephemeralKeys.create(
-    { customer: user.stripeId },
+    { customer: user?.stripeId },
     { apiVersion: "2020-08-27" }
   );
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amount,
     currency: "LKR",
-    customer: user.stripeId,
+    customer: user?.stripeId,
   });
 
   res.send({
     clientSecret: paymentIntent.client_secret,
     ephemeralKey: ephemeralKey.secret,
-    customerId: user.stripeId,
+    customerId: user?.stripeId,
   });
 };
 
-module.exports = {
+export default {
   getUsers,
-  // createUser,
   updateUser,
   deleteUser,
   getUser,
-  getOrders,
   createPaymentIntent,
 };

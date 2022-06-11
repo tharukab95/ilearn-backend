@@ -1,6 +1,6 @@
-const User = require("../model/User");
+import User from "../models/User";
 
-const getCustomer = (req, res, next) => {
+const getCustomer = async (req, res, next) => {
   const { id } = req.params;
   let customer;
   try {
@@ -15,4 +15,4 @@ const getCustomer = (req, res, next) => {
   next();
 };
 
-module.exports = getCustomer;
+export default getCustomer;

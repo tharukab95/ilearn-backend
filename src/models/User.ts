@@ -1,5 +1,21 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { Document, model, Schema } from "mongoose";
+
+export interface UserDocument extends Document {
+  userName: string;
+  firstName?: string;
+  lastName?: string;
+  address?: string;
+  email: string;
+  emailVerified: boolean;
+  phone?: string;
+  phoneVerified: boolean;
+  roles?: number;
+  password: string;
+  stripeId?: string;
+  refreshToken?: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const userSchema = new Schema(
   {
@@ -45,9 +61,15 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    stripeId: {
+      type: String,
+    },
     refreshToken: [String],
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("User", userSchema);
+const User = model<UserDocument>("User", userSchema);
+export default User;
+
+// export default User;
