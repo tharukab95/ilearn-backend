@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from "../models/user.model";
 import config from "config";
 import axioClient from "../utils/axioClient";
 import axios from "axios";

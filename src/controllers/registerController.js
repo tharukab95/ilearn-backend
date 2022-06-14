@@ -1,4 +1,4 @@
-import User = require("../models/User");
+import User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 
 const handleNewUser = async (req, res) => {

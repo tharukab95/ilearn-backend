@@ -1,35 +1,40 @@
 import { Document, model, Schema } from "mongoose";
 
-export interface UserDocument extends Document {
-  userName: string;
-  firstName?: string;
-  lastName?: string;
+export interface IUser {
+  username: string;
+  firstName: string;
+  lastName: string;
   address?: string;
   email: string;
   emailVerified: boolean;
   phone?: string;
   phoneVerified: boolean;
-  roles?: number;
+  roles?: object;
   password: string;
   stripeId?: string;
   refreshToken?: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
+
+export interface UserDocument extends IUser, Document {}
 
 const userSchema = new Schema(
   {
     username: {
       type: String,
       required: true,
+      unique: true,
     },
     firstName: {
       type: String,
       trim: true,
+      required: true,
     },
     lastName: {
       type: String,
       trim: true,
+      required: true,
     },
     email: {
       required: true,
@@ -57,6 +62,7 @@ const userSchema = new Schema(
       Editor: Number,
       Admin: Number,
     },
+
     password: {
       type: String,
       required: true,

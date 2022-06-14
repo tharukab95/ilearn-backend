@@ -7,6 +7,7 @@ export default {
     dbUri:
       "mongodb+srv://ilearnhub-premium:Dragon102824@ilearn-store.3al69.mongodb.net/ilearn",
   },
+  logLevel: "info",
   stripe: {
     publishableKey: "",
     secretKey: "",

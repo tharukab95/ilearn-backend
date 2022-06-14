@@ -1,7 +1,9 @@
-import User from "../models/User";
+import User, { IUser } from "../models/user.model";
 // import Order = require("../model/Order");
 import config from "config";
 import Stripe from "stripe";
+import { Request } from "express";
+import { omit } from "lodash";
 
 const stripe = new Stripe(
   config.get<string>("stripe.secretKey") ?? "",
@@ -15,25 +17,30 @@ const getUsers = async (req, res) => {
   res.json(users);
 };
 
-// const createUser = async (req, res) => {
-//   const { userName, firstName, lastName, phone, role } = req.body;
-//   console.log(req.body);
-//   if ((!userName, !firstName || !lastName || !phone || !role))
-//     return res
-//       .status(400)
-//       .json({ message: "Required field/fields values missing." });
+const createUser = async (req: Request<{}, {}, IUser>, res) => {
+  const { username, firstName, lastName, phone } = req.body;
+  if ((!username, !firstName || !lastName || !phone))
+    return res
+      .status(400)
+      .json({ message: "Required field/fields values missing." });
 
-//   const duplicate = await User.findOne({ phone: phone }).exec();
-//   if (duplicate) return res.sendStatus(409);
+  const duplicate = await User.findOne({ phone: phone }).exec();
+  if (duplicate) return res.sendStatus(409);
 
-//   try {
-//     const result = await User.create(req.body);
-//     console.log(result);
-//     res.status(200).json({ result });
-//   } catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// };
+  try {
+    const result = await User.create(req.body);
+    const payload = omit(result.toJSON(), [
+      "password",
+      "refreshToken",
+      "stripeId",
+      "__v",
+    ]);
+
+    res.status(200).json({ payload });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 
 const updateUser = async (req, res) => {
   const { userName, ...updateParameters } = req.body;
@@ -133,6 +140,7 @@ const createPaymentIntent = async (req, res) => {
 
 export default {
   getUsers,
+  createUser,
   updateUser,
   deleteUser,
   getUser,
