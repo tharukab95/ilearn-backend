@@ -6,14 +6,13 @@ import cookieParser = require("cookie-parser");
 import logger = require("morgan");
 import errorHandler from "./middleware/errorHandler";
 import verifyJWT = require("./middleware/verifyJWT");
-import { connection } from "mongoose";
-import config from "./config";
-import { connectDatabase } from "./config/dbConn";
+import config from "config";
+import { connectMongodb } from "./utils/connectMongodb";
 import credentials from "./middleware/credentials";
 
 // import rootRouter from "./routes/root";
 import usersRouter from "./routes/api/users";
-import corsOptions from "./config/corsOptions";
+import corsOptions from "./utils/corsOptions";
 
 // import authRouter = require("./routes/auth");
 // import registerRouter = require("./routes/api/register");
@@ -26,9 +25,6 @@ const app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
-
-// Connect to MongoDB
-connectDatabase();
 
 app.use(logger("dev"));
 app.use(credentials);
@@ -67,11 +63,17 @@ app.all("*", (req, res) => {
 
 app.use(errorHandler);
 
-connection.once("open", () => {
-  console.log("Connected to MongoDB");
-  app.listen(config.server.port, () =>
-    console.log(`Server running on port ${config.server.port}`)
-  );
+app.listen(config.server.port, () => {
+  console.log(`Server running on port ${config.server.port}`);
+
+  connectMongodb();
 });
+
+// connection.once("open", () => {
+//   console.log("Connected to MongoDB");
+//   app.listen(config.server.port, () =>
+//     console.log(`Server running on port ${config.server.port}`)
+//   );
+// });
 
 exports = app;

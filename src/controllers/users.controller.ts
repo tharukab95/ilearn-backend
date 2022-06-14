@@ -1,8 +1,10 @@
 import User from "../models/User";
 // import Order = require("../model/Order");
+import config from "config";
 import Stripe from "stripe";
+
 const stripe = new Stripe(
-  process.env.STRIPE_SECRET_KEY ?? "",
+  config.get<string>("stripe.secretKey") ?? "",
   {} as Stripe.StripeConfig
 );
 // import stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);

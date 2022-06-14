@@ -1,6 +1,6 @@
 import User = require("../models/User");
 const jwt = require("jsonwebtoken");
-const zoomConfig = require("../config/zoomConfig");
+const zoomConfig = require("../../config/zoomConfig");
 const rp = require("request-promise");
 var generate = require("../utils/jitsiMeetAuth");
 const fs = require("fs");

@@ -1,6 +1,6 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
-const zoomConfig = require("../config/zoomConfig");
+const zoomConfig = require("../../config/zoomConfig");
 
 const payload = {
   iss: zoomConfig.APIKey,

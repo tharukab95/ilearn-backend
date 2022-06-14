@@ -1,12 +1,13 @@
-import config from "../config";
+import config from "config";
+import { NextFunction, Request, Response } from "express";
 
-const credentials = (req, res, next) => {
+const credentials = (req: Request, res: Response, next: NextFunction) => {
+  const allowedOrigins = config.get<string[]>("allowedOrigins");
   const origin = req.headers.origin;
-  if (config.cors.allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Credentials", true);
+  if (allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Credentials", true.toString());
   }
   next();
 };
 
-export default
- credentials;
+export default credentials;

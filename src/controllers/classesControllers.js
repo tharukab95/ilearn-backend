@@ -1,11 +1,13 @@
-import User = require("../models/User");
-const axioClient = require("../utils/axioClient");
-const axios = require("axios");
-const jwt = require("jsonwebtoken");
-const zoomConfig = require("../config/zoomConfig");
+import User from "../models/User";
+import config from "config";
+import axioClient from "../utils/axioClient";
+import axios from "axios";
+import jwt from "jsonwebtoken";
 
 const createClass = async (req, res) => {
   const { name } = req.body;
+  const { clientId, clientSecret }: { clientId: string; clientSecret: string } =
+    config.get("zoom");
   console.log("creating class ", name);
 
   axios
@@ -14,9 +16,7 @@ const createClass = async (req, res) => {
       {},
       {
         auth: {
-          basic: Buffer.from(
-            process.env.ZOOM_CLIENT_ID + ":" + process.env.ZOOM_CLIENT_SECRET
-          ).toString("base64"),
+          basic: Buffer.from(clientId + ":" + clientSecret).toString("base64"),
         },
         headers: {
           "content-type": "application/x-www-form-urlencoded",
