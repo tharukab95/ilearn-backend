@@ -11,12 +11,11 @@ import credentials from "./middleware/credentials";
 import logger from "./utils/logger";
 
 // import rootRouter from "./routes/root";
-import usersRouter from "./routes/api/users";
+import usersRouter from "./routes/api/users.route";
 import corsOptions from "./utils/corsOptions";
 import apiLogger from "./middleware/apiLogger";
 
 // import authRouter = require("./routes/auth");
-// import registerRouter = require("./routes/api/register");
 // import refreshRouter = require("./routes/refresh");
 // import meetingsRouter = require("./routes/api/meetings");
 // import classesRouter = require("./routes/api/classes");

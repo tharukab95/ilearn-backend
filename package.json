@@ -33,7 +33,8 @@
     "stripe": "^8.195.0",
     "uuid": "^8.3.2",
     "uuid-random": "^1.3.2",
-    "validator": "^13.7.0"
+    "validator": "^13.7.0",
+    "zod": "^3.17.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

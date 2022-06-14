@@ -1,20 +1,15 @@
 import { NextFunction, Request, Response } from "express";
-import { ObjectSchema } from "joi";
+import { AnyZodObject } from "zod";
 import logger from "../utils/logger";
 
-const schemaValidator = (schema: ObjectSchema) => {
-  return async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ): Promise<any> => {
+const schemaValidator = (schema: AnyZodObject) => {
+  return (req: Request, res: Response, next: NextFunction) => {
     try {
-      await schema.validateAsync(req.body);
-
+      schema.parse({ body: req.body, query: req.query, params: req.params });
       next();
     } catch (err: any) {
-      logger.error(err.message);
-      return res.status(500).json(err.message);
+      logger.error(err.errors);
+      return res.status(400).json(err.errors);
     }
   };
 };
